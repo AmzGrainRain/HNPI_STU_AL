@@ -1,0 +1,235 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Include">
+      <UniqueIdentifier>{aa90cf3c-3743-453a-aea4-280b07be60b2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Include\hv">
+      <UniqueIdentifier>{4b0986b4-9492-4266-bcf8-2a687e149c25}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\hv\AsyncHttpClient.h">
+      <Filter>Include\hv</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hv\axios.h">
+      <Filter>Include\hv</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hv\base64.h">
+      <Filter>Include\hv</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hv\Buffer.h">
+      <Filter>Include\hv</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hv\Channel.h">
+      <Filter>Include\hv</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hv\Event.h">
+      <Filter>Include\hv</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hv\EventLoop.h">
+      <Filter>Include\hv</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hv\EventLoopThread.h">
+      <Filter>Include\hv</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hv\EventLoopThreadPool.h">
+      <Filter>Include\hv</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hv\hasync.h">
+      <Filter>Include\hv</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hv\hatomic.h">
+      <Filter>Include\hv</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hv\hbase.h">
+      <Filter>Include\hv</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hv\hbuf.h">
+      <Filter>Include\hv</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hv\hconfig.h">
+      <Filter>Include\hv</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hv\hdef.h">
+      <Filter>Include\hv</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hv\hdir.h">
+      <Filter>Include\hv</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hv\hendian.h">
+      <Filter>Include\hv</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hv\herr.h">
+      <Filter>Include\hv</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hv\hexport.h">
+      <Filter>Include\hv</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hv\hfile.h">
+      <Filter>Include\hv</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hv\hlog.h">
+      <Filter>Include\hv</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hv\hloop.h">
+      <Filter>Include\hv</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hv\hmain.h">
+      <Filter>Include\hv</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hv\hmap.h">
+      <Filter>Include\hv</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hv\hmath.h">
+      <Filter>Include\hv</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hv\hmutex.h">
+      <Filter>Include\hv</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hv\hobjectpool.h">
+      <Filter>Include\hv</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hv\hpath.h">
+      <Filter>Include\hv</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hv\hplatform.h">
+      <Filter>Include\hv</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hv\hproc.h">
+      <Filter>Include\hv</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hv\hscope.h">
+      <Filter>Include\hv</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hv\hsocket.h">
+      <Filter>Include\hv</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hv\hssl.h">
+      <Filter>Include\hv</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hv\hstring.h">
+      <Filter>Include\hv</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hv\hsysinfo.h">
+      <Filter>Include\hv</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hv\hthread.h">
+      <Filter>Include\hv</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hv\hthreadpool.h">
+      <Filter>Include\hv</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hv\htime.h">
+      <Filter>Include\hv</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hv\http_content.h">
+      <Filter>Include\hv</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hv\HttpClient.h">
+      <Filter>Include\hv</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hv\httpdef.h">
+      <Filter>Include\hv</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hv\HttpMessage.h">
+      <Filter>Include\hv</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hv\HttpParser.h">
+      <Filter>Include\hv</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hv\hurl.h">
+      <Filter>Include\hv</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hv\hv.h">
+      <Filter>Include\hv</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hv\hversion.h">
+      <Filter>Include\hv</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hv\ifconfig.h">
+      <Filter>Include\hv</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hv\iniparser.h">
+      <Filter>Include\hv</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hv\json.hpp">
+      <Filter>Include\hv</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hv\md5.h">
+      <Filter>Include\hv</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hv\nlog.h">
+      <Filter>Include\hv</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hv\requests.h">
+      <Filter>Include\hv</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hv\sha1.h">
+      <Filter>Include\hv</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hv\singleton.h">
+      <Filter>Include\hv</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hv\Status.h">
+      <Filter>Include\hv</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hv\TcpClient.h">
+      <Filter>Include\hv</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hv\TcpServer.h">
+      <Filter>Include\hv</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hv\ThreadLocalStorage.h">
+      <Filter>Include\hv</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hv\UdpClient.h">
+      <Filter>Include\hv</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hv\UdpServer.h">
+      <Filter>Include\hv</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hv\WebSocketChannel.h">
+      <Filter>Include\hv</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hv\WebSocketClient.h">
+      <Filter>Include\hv</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hv\WebSocketParser.h">
+      <Filter>Include\hv</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hv\wsdef.h">
+      <Filter>Include\hv</Filter>
+    </ClInclude>
+    <ClInclude Include="auth.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cli.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="def.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="logger.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="service_manager.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="utils.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="settings.ini" />
+  </ItemGroup>
+</Project>

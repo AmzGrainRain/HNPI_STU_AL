@@ -1,0 +1,6 @@
+.vs
+.vscode
+out
+build
+x64
+settings.ini

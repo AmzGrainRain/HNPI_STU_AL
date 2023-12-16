@@ -1,0 +1,263 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="auth.hpp" />
+    <ClInclude Include="cli.hpp" />
+    <ClInclude Include="def.h" />
+    <ClInclude Include="include\hv\AsyncHttpClient.h" />
+    <ClInclude Include="include\hv\axios.h" />
+    <ClInclude Include="include\hv\base64.h" />
+    <ClInclude Include="include\hv\Buffer.h" />
+    <ClInclude Include="include\hv\Channel.h" />
+    <ClInclude Include="include\hv\Event.h" />
+    <ClInclude Include="include\hv\EventLoop.h" />
+    <ClInclude Include="include\hv\EventLoopThread.h" />
+    <ClInclude Include="include\hv\EventLoopThreadPool.h" />
+    <ClInclude Include="include\hv\hasync.h" />
+    <ClInclude Include="include\hv\hatomic.h" />
+    <ClInclude Include="include\hv\hbase.h" />
+    <ClInclude Include="include\hv\hbuf.h" />
+    <ClInclude Include="include\hv\hconfig.h" />
+    <ClInclude Include="include\hv\hdef.h" />
+    <ClInclude Include="include\hv\hdir.h" />
+    <ClInclude Include="include\hv\hendian.h" />
+    <ClInclude Include="include\hv\herr.h" />
+    <ClInclude Include="include\hv\hexport.h" />
+    <ClInclude Include="include\hv\hfile.h" />
+    <ClInclude Include="include\hv\hlog.h" />
+    <ClInclude Include="include\hv\hloop.h" />
+    <ClInclude Include="include\hv\hmain.h" />
+    <ClInclude Include="include\hv\hmap.h" />
+    <ClInclude Include="include\hv\hmath.h" />
+    <ClInclude Include="include\hv\hmutex.h" />
+    <ClInclude Include="include\hv\hobjectpool.h" />
+    <ClInclude Include="include\hv\hpath.h" />
+    <ClInclude Include="include\hv\hplatform.h" />
+    <ClInclude Include="include\hv\hproc.h" />
+    <ClInclude Include="include\hv\hscope.h" />
+    <ClInclude Include="include\hv\hsocket.h" />
+    <ClInclude Include="include\hv\hssl.h" />
+    <ClInclude Include="include\hv\hstring.h" />
+    <ClInclude Include="include\hv\hsysinfo.h" />
+    <ClInclude Include="include\hv\hthread.h" />
+    <ClInclude Include="include\hv\hthreadpool.h" />
+    <ClInclude Include="include\hv\htime.h" />
+    <ClInclude Include="include\hv\HttpClient.h" />
+    <ClInclude Include="include\hv\httpdef.h" />
+    <ClInclude Include="include\hv\HttpMessage.h" />
+    <ClInclude Include="include\hv\HttpParser.h" />
+    <ClInclude Include="include\hv\http_content.h" />
+    <ClInclude Include="include\hv\hurl.h" />
+    <ClInclude Include="include\hv\hv.h" />
+    <ClInclude Include="include\hv\hversion.h" />
+    <ClInclude Include="include\hv\ifconfig.h" />
+    <ClInclude Include="include\hv\iniparser.h" />
+    <ClInclude Include="include\hv\json.hpp" />
+    <ClInclude Include="include\hv\md5.h" />
+    <ClInclude Include="include\hv\nlog.h" />
+    <ClInclude Include="include\hv\requests.h" />
+    <ClInclude Include="include\hv\sha1.h" />
+    <ClInclude Include="include\hv\singleton.h" />
+    <ClInclude Include="include\hv\Status.h" />
+    <ClInclude Include="include\hv\TcpClient.h" />
+    <ClInclude Include="include\hv\TcpServer.h" />
+    <ClInclude Include="include\hv\ThreadLocalStorage.h" />
+    <ClInclude Include="include\hv\UdpClient.h" />
+    <ClInclude Include="include\hv\UdpServer.h" />
+    <ClInclude Include="include\hv\WebSocketChannel.h" />
+    <ClInclude Include="include\hv\WebSocketClient.h" />
+    <ClInclude Include="include\hv\WebSocketParser.h" />
+    <ClInclude Include="include\hv\wsdef.h" />
+    <ClInclude Include="logger.hpp" />
+    <ClInclude Include="service_manager.hpp" />
+    <ClInclude Include="utils.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="settings.ini" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>17.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{4439a13e-c396-46e2-a514-3bb364748aae}</ProjectGuid>
+    <RootNamespace>HNPISTUAL</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <IncludePath>C:\Users\khlee\Desktop\HNPI_STU_AL\include\hv;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\khlee\Desktop\HNPI_STU_AL\libs;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <IncludePath>C:\Users\khlee\Desktop\HNPI_STU_AL\include\hv;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\khlee\Desktop\HNPI_STU_AL\libs;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>include\hv;$(IncludePath)</IncludePath>
+    <LibraryPath>lib\Debug;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IncludePath>include\hv;$(IncludePath)</IncludePath>
+    <LibraryPath>lib\Release;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Label="Vcpkg" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <VcpkgUseStatic>false</VcpkgUseStatic>
+  </PropertyGroup>
+  <PropertyGroup Label="Vcpkg" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <VcpkgUseStatic>false</VcpkgUseStatic>
+  </PropertyGroup>
+  <PropertyGroup Label="Vcpkg" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <VcpkgUseStatic>false</VcpkgUseStatic>
+  </PropertyGroup>
+  <PropertyGroup Label="Vcpkg" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <VcpkgUseStatic>true</VcpkgUseStatic>
+  </PropertyGroup>
+  <PropertyGroup Label="Vcpkg" />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <AssemblerOutput>All</AssemblerOutput>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>hv_static.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <ShowProgress>LinkVerboseSAFESEH</ShowProgress>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <AssemblerOutput>All</AssemblerOutput>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>hv_static.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <ShowProgress>LinkVerboseSAFESEH</ShowProgress>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <AssemblerOutput>AssemblyAndMachineCode</AssemblerOutput>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <ShowProgress>LinkVerboseREF</ShowProgress>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;HV_STATICLIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <AssemblerOutput>AssemblyAndMachineCode</AssemblerOutput>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>hv_static.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <ShowProgress>LinkVerboseSAFESEH</ShowProgress>
+    </Link>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
