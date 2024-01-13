@@ -44,7 +44,7 @@
 
 ![以管理员身份运行](./doc/install_service/02.png)
 
-然后输入 2 按回车即可安装服务：
+然后输入 1 按回车即可安装服务：
 
 ![安装服务](./doc/install_service/03.png)
 
