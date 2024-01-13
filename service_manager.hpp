@@ -51,16 +51,12 @@ namespace ServiceManager {
 			logger->writeInfo("ReportServiceStatus", msg);
 			};
 
-		log("Update service status.\n");
 		ServiceStatus.dwCurrentState = dwCurrentState;
 		ServiceStatus.dwWin32ExitCode = dwWin32ExitCode;
 		ServiceStatus.dwWaitHint = dwWaitHint;
 
 		if (dwCurrentState == SERVICE_START_PENDING)
-		{
-			logger->writeWarning("ReportServiceStatus", "The service is starting and does not accept any control.\n");
 			ServiceStatus.dwControlsAccepted = 0;
-		}
 		else
 		{
 			log("Service started.\n");
@@ -68,10 +64,7 @@ namespace ServiceManager {
 		}
 
 		if (dwCurrentState == SERVICE_RUNNING || dwCurrentState == SERVICE_STOPPED)
-		{
-			log("Reset check point.\n");
 			ServiceStatus.dwCheckPoint = 0;
-		}
 		else ServiceStatus.dwCheckPoint++;
 
 		SetServiceStatus(ServiceStatusHandle, &ServiceStatus);
@@ -88,7 +81,6 @@ namespace ServiceManager {
 			ReportServiceStatus(SERVICE_STOPPED, NO_ERROR, 0);
 			return NO_ERROR;
 		case SERVICE_CONTROL_INTERROGATE:
-			logger->writeInfo("HandlerEx", "Report to Service Manager: ok\n");
 			return NO_ERROR;
 		default:
 			logger->writeWarning("HandlerEx", "Call not implemented.\n");
@@ -117,7 +109,6 @@ namespace ServiceManager {
 		ServiceStatus.dwCheckPoint = 0;
 		ServiceStatus.dwWaitHint = 0;
 
-		logger->writeInfo("ServiceMain", "Open the service control handler...\n");
 		ServiceStatusHandle = ::RegisterServiceCtrlHandlerExW(ServiceName, HandlerEx, NULL);
 		if (ServiceStatusHandle == NULL)
 		{
@@ -126,7 +117,6 @@ namespace ServiceManager {
 		}
 		ReportServiceStatus(SERVICE_START_PENDING, NO_ERROR, 3000);
 
-		logger->writeInfo("ServiceMain", "WSAStartup...\n");
 		WSADATA wsaData;
 		if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
 		{
@@ -135,7 +125,6 @@ namespace ServiceManager {
 			return;
 		}
 
-		logger->writeInfo("ServiceMain", "Regist notify for ip interface changed...\n");
 		HANDLE h = NULL;
 		if (NotifyIpInterfaceChange(AF_INET, OnNetworkAddressChanged, NULL, FALSE, &h) != NO_ERROR || h == NULL)
 		{
@@ -148,8 +137,7 @@ namespace ServiceManager {
 		logger->writeInfo("ServiceMain", "\n\n\n\t\tService started\n\n\n");
 		ReportServiceStatus(SERVICE_RUNNING, NO_ERROR, 0);
 		while (ServiceStatus.dwCurrentState == SERVICE_RUNNING) {
-			logger->writeInfo("ServiceLoop", "There's nothing to do for now, take a nap...\n");
-			Sleep(60000);
+			Sleep(120000);
 		}
 
 		WSACleanup();
