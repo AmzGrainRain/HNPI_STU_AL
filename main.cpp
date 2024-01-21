@@ -9,14 +9,14 @@
 #include <Windows.h>	// GetPrivateProfileString
 
 // success will be returns memory-allocated struct Config*, don't forget to delete it
-static std::optional<Config*> init(char* execPath)
+static std::optional<Config*> init(const char* execPath)
 {
 	Config* conf = new Config;
 	conf->PWD = execPath;
 	conf->PWD = conf->PWD.substr(0, conf->PWD.rfind('\\'));
 	conf->INI_FILE_PATH = conf->PWD + "\\settings.ini";
 
-	if (!Utils::FileExists(conf->INI_FILE_PATH))
+	if (!Utils::FileExists(conf->INI_FILE_PATH.c_str()))
 	{
 		std::cout << "ÅäÖÃÎÄ¼þ²»´æÔÚ, ³¢ÊÔÉú³É...\n";
 		std::ofstream file(conf->INI_FILE_PATH);
@@ -47,8 +47,7 @@ static std::optional<Config*> init(char* execPath)
 
 	if (conf->USER_NAME.size() == 0 || conf->PASSWORD.size() == 0)
 	{
-		std::cout << "ÕËºÅ»òÃÜÂëÎª¿Õ\n"
-			<< "Çë´ò¿ª settings.ini ÎÄ¼þÅäÖÃÕËºÅÃÜÂë.\n";
+		std::cout << "ÕËºÅ»òÃÜÂëÎª¿Õ\n" << "Çë´ò¿ª settings.ini ÎÄ¼þÅäÖÃÕËºÅÃÜÂë.\n";
 		return std::nullopt;
 	}
 
@@ -74,9 +73,9 @@ int main(int argc, char** argv) {
 		ok = ServiceManager::Run(conf);
 	else
 	{
-		/*std::cout << "¿ìËÙµÇÂ¼...\n";
-		bool authRes = Auth::Login(conf->USER_NAME, conf->PASSWORD);
-		std::cout << (authRes ? "µÇÂ½³É¹¦" : "µÇÂ½Ê§°Ü") << '\n';*/
+		std::cout << "¿ìËÙµÇÂ¼...\n";
+		bool res = Auth::Login(conf->USER_NAME.c_str(), conf->PASSWORD.c_str());
+		std::cout << (res ? "µÇÂ½³É¹¦" : "µÇÂ½Ê§°Ü") << '\n';
 		ok = CLI::Run(conf);
 	}
 

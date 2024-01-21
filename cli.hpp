@@ -48,7 +48,7 @@ namespace CLI {
 				break;
 			case 3:
 				std::cout << "³¢ÊÔµÇÂ¼...\n";
-				std::cout << (Auth::Login(conf->USER_NAME, conf->PASSWORD) ? "µÇÂ¼³É¹¦" : "µÇÂ¼Ê§°Ü") << '\n';
+				std::cout << (Auth::Login(conf->USER_NAME.c_str(), conf->PASSWORD.c_str()) ? "µÇÂ¼³É¹¦" : "µÇÂ¼Ê§°Ü") << '\n';
 				break;
 			case 4:
 				return true;

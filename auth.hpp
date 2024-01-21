@@ -7,9 +7,7 @@
 #include <sstream>		// std::stringstream
 #include <codecvt>		// std::wstring_convert | std::codecvt_utf8_utf16
 
-/*
-	libhv network library
-*/
+// libhv
 #include "HttpClient.h"
 #include "requests.h"
 //#define HV_STATICLIB
@@ -20,7 +18,7 @@
 #include "service_manager.hpp"	// namespace ServiceManager
 
 namespace Auth {
-	static std::optional<std::string> GetSessionId() {
+	static std::optional<const char*> GetSessionId() {
 		try {
 			hv::HttpClient client;
 
@@ -42,7 +40,7 @@ namespace Auth {
 
 			std::string cookie = it->second;
 
-			return cookie.substr(0, cookie.find(';'));
+			return cookie.substr(0, cookie.find(';')).c_str();
 		}
 		catch (const std::exception& err) {
 			std::cout << err.what() << "\n";
@@ -50,7 +48,7 @@ namespace Auth {
 		}
 	}
 
-	static std::optional<std::string> GetQueryString() {
+	static std::optional<const char*> GetQueryString() {
 		try {
 			auto res = requests::get("http://123.123.123.123");
 			if (res == NULL)
@@ -59,7 +57,7 @@ namespace Auth {
 			std::string body = res->body.c_str();
 			size_t start = body.find('?') + 1;
 			size_t end = body.rfind('\'');
-			return body.substr(start, end - start);
+			return body.substr(start, end - start).c_str();
 		}
 		catch (const std::exception& err) {
 			std::cout << err.what() << "\n";
@@ -67,11 +65,8 @@ namespace Auth {
 		}
 	}
 
-	static std::optional<std::string> Auth(
-		const std::string& userName,
-		const std::string& password,
-		std::string&& sessionId,
-		std::string&& queryString)
+	static std::optional<const char*> Auth(const char* userName,
+		const char* password, const char* sessionId, const char* queryString)
 	{
 		std::string cookie = "EPORTAL_COOKIE_PASSWORD=; ";
 		cookie += "EPORTAL_COOKIE_USERNAME=; ";
@@ -96,7 +91,7 @@ namespace Auth {
 		req.headers["Dnt"] = "1";
 		req.headers["Host"] = "192.168.0.123";
 		req.headers["Origin"] = "http://192.168.0.123";
-		req.headers["Referer"] = "http://192.168.0.123/eportal/index.jsp?" + queryString;
+		req.headers["Referer"] = "http://192.168.0.123/eportal/index.jsp?" + std::string(queryString);
 		req.headers["User-Agent"] = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36 Edg/116.0.1938.76";
 		req.body = body.str();
 
@@ -108,7 +103,7 @@ namespace Auth {
 		return res.body.c_str();
 	}
 
-	bool Login(std::string userName, std::string password)
+	bool Login(const char* userName, const char* password)
 	{
 		auto queryString = GetQueryString();
 		if (!queryString.has_value()) {

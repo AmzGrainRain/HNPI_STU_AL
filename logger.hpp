@@ -10,7 +10,7 @@
 class Logger
 {
 public:
-	Logger(std::string logDir) : directory_(logDir)
+	Logger(const char* logDir) : directory_(logDir)
 	{
 		namespace fs = std::filesystem;
 
@@ -43,7 +43,8 @@ public:
 
 		if (file_ != nullptr)
 		{
-			if (file_->is_open()) file_->close();
+			if (file_->is_open())
+				file_->close();
 			delete file_;
 			file_ = nullptr;
 		}
@@ -62,17 +63,17 @@ public:
 		return true;
 	}
 
-	bool writeInfo(const char* form, const char* msg) const
+	inline bool writeInfo(const char* form, const char* msg) const
 	{
 		return write("INFO", form, msg);
 	}
 
-	bool writeWarning(const char* form, const char* msg) const
+	inline bool writeWarning(const char* form, const char* msg) const
 	{
 		return write("WARNING", form, msg);
 	}
 
-	bool writeError(const char* form, const char* msg) const
+	inline bool writeError(const char* form, const char* msg) const
 	{
 		return write("ERROR", form, msg);
 	}
@@ -91,24 +92,24 @@ private:
 		return true;
 	}
 
-	std::string getCurrentDate() const
+	const char* getCurrentDate() const
 	{
 		time_t time = std::chrono::system_clock::to_time_t(clock_->now());
 		struct tm timeinfo;
 		localtime_s(&timeinfo, &time);
 		std::stringstream ss;
 		ss << std::put_time(&timeinfo, "%Y-%m-%d");
-		return ss.str();
+		return ss.str().c_str();
 	}
 
-	std::string getCurrentDateTime() const
+	const char* getCurrentDateTime() const
 	{
 		time_t time = std::chrono::system_clock::to_time_t(clock_->now());
 		struct tm timeinfo;
 		localtime_s(&timeinfo, &time);
 		std::stringstream ss;
 		ss << std::put_time(&timeinfo, "%Y-%m-%d %H:%M:%S");
-		return ss.str();
+		return ss.str().c_str();
 	}
 
 	std::chrono::system_clock* clock_;

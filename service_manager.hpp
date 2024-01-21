@@ -93,7 +93,7 @@ namespace ServiceManager {
 	{
 		logger->writeInfo("OnNetworkAddressChanged", "Network address changed.\n");
 		logger->writeInfo("Auth", "Login...\n");
-		bool loginResult = Auth::Login(conf->USER_NAME, conf->PASSWORD);
+		bool loginResult = Auth::Login(conf->USER_NAME.c_str(), conf->PASSWORD.c_str());
 		logger->writeInfo("Auth", loginResult ? "Login successful.\n" : "Login failed.\n");
 	}
 
@@ -230,7 +230,7 @@ namespace ServiceManager {
 
 		try
 		{
-			logger = new Logger(conf->PWD + "\\logs");
+			logger = new Logger((conf->PWD + "\\logs").c_str());
 			logger->writeInfo("SERVICE_TABLE_ENTRY", "OK\n");
 		}
 		catch (const std::exception& err)
@@ -239,7 +239,7 @@ namespace ServiceManager {
 			return false;
 		}
 
-		Auth::Login(conf->USER_NAME, conf->PASSWORD);
+		Auth::Login(conf->USER_NAME.c_str(), conf->PASSWORD.c_str());
 
 		if (::StartServiceCtrlDispatcherW(ServiceTable) == FALSE) {
 			logger->writeError("Main", "Failed to start service control dispatcher.\n");

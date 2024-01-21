@@ -50,14 +50,14 @@ namespace Utils
 	}
 
 	// Check file exist
-	static bool FileExists(const std::string& path) {
+	static bool FileExists(const char* path) {
 		return std::filesystem::exists(path);
 	}
 
-	std::string EncodeURIComponent(const std::string& url) noexcept {
+	const char* EncodeURIComponent(const char* url) noexcept {
 		std::string res;
-		for (char i : url) {
-			switch (i)
+		for (size_t i = 0; i < strlen(url); ++i) {
+			switch (url[i])
 			{
 			case ' ':
 				res += "%20";
@@ -156,7 +156,7 @@ namespace Utils
 				res += i;
 			}
 		}
-		return res;
+		return res.c_str();
 	}
 
 	void HideConsoleCursor()
