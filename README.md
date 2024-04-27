@@ -1,20 +1,27 @@
 # 河南工院校园网自动登录服务
 
-每次都要打开浏览器实在是麻烦，要不要更简单些？
+每次都要打开浏览器认证校园网，实在是麻烦。
+
+要不要更简单些？
 
 ## 编译
 
 开发时仅考虑了 Windows 平台。如果想移植为 linux 平台，需要编写新的 service_manager.hpp 以及修改所有代码中使用的 Windows API 。
 
-编译器：MSVC
+工具链：MSVC + CMAKE
 
 语言级别：C++20、C17
 
-源码文件编码：GBK（包含中文注释或源码的源代码文件），UTF-8
-
 编译时不要开启 Windows 的 Unicode UTF-8 字符集支持，否则将导致没有开启 Unicode UTF-8 字符集支持的 Windows 运行此程序时中文乱码。
 
-服务启动后，您可以在程序所在的目录下看到一个 logs 目录，如果您需要反馈 bug，请连带目录内部的日志一同上传。
+编译步骤：
+
+```cmake
+mkdir build
+cd build
+cmake ..
+cmake --build . --target HNPI_STU_AL --config Release --verbose
+```
 
 ## 基本使用
 
