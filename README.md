@@ -10,9 +10,9 @@
 
 语言级别：C++20、C17
 
-源码文件编码：GBK，CodePage 936
+源码文件编码：GBK（包含中文注释或源码的源代码文件），UTF-8
 
-编译时不要开启 windows 的 unicode utf-8 字符集支持，否则将导致没有开启 unicode utf-8 字符集支持的 windows 运行此程序时中文乱码。
+编译时不要开启 Windows 的 Unicode UTF-8 字符集支持，否则将导致没有开启 Unicode UTF-8 字符集支持的 Windows 运行此程序时中文乱码。
 
 服务启动后，您可以在程序所在的目录下看到一个 logs 目录，如果您需要反馈 bug，请连带目录内部的日志一同上传。
 

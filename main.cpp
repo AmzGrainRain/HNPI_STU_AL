@@ -2,84 +2,82 @@
 #include <optional>
 #include <string>
 
-#include "def.h"		// struct Config
-#include "logger.hpp"	// class Logger
-#include "cli.hpp"		// namespace CLI
+#include "def.h"   // struct Config
+#include "cli.hpp" // namespace CLI
 
-#include <Windows.h>	// GetPrivateProfileString
+#include <Windows.h> // GetPrivateProfileStringW
 
 // success will be returns memory-allocated struct Config*, don't forget to delete it
-static std::optional<Config*> init(const char* execPath)
+static std::optional<Config *> init(const char *execPath)
 {
-	Config* conf = new Config;
+	Config *conf = new Config;
 	conf->PWD = execPath;
-	conf->PWD = conf->PWD.substr(0, conf->PWD.rfind('\\'));
-	conf->INI_FILE_PATH = conf->PWD + "\\settings.ini";
+	conf->PWD = conf->PWD.parent_path();
+	conf->INI_FILE_PATH = conf->PWD / "settings.ini";
 
-	if (!Utils::FileExists(conf->INI_FILE_PATH.c_str()))
+	if (!std::filesystem::exists(conf->INI_FILE_PATH))
 	{
-		std::cout << "ÅäÖÃÎÄ¼þ²»´æÔÚ, ³¢ÊÔÉú³É...\n";
+		std::cout << "é…ç½®æ–‡ä»¶ä¸å­˜åœ¨, å°è¯•ç”Ÿæˆ...\n";
 		std::ofstream file(conf->INI_FILE_PATH);
-		if (!file) {
-			std::cout << "Éú³ÉÅäÖÃÎÄ¼þÊ§°Ü, Çë³¢ÊÔÒÔ¹ÜÀíÔ±Éí·ÝÔËÐÐ´Ë³ÌÐò.\n";
+		if (!file)
+		{
+			std::cout << "ç”Ÿæˆé…ç½®æ–‡ä»¶å¤±è´¥, è¯·å°è¯•ä»¥ç®¡ç†å‘˜èº«ä»½è¿è¡Œæ­¤ç¨‹åº.\n";
 			return std::nullopt;
 		}
 		file << "[Settings]\n";
 		file << "UserName=\n";
 		file << "Password=";
 		file.close();
-		std::cout << "ÒÑÔÚµ±Ç°Ä¿Â¼Éú³ÉÅäÖÃÎÄ¼þ, ÇëÌîÐ´ÕËºÅÃÜÂëºóÔÙ´ÎÔËÐÐ.\n";
+		std::cout << "å·²åœ¨å½“å‰ç›®å½•ç”Ÿæˆé…ç½®æ–‡ä»¶, è¯·åœ¨ settings.ini å†…å¡«å†™è´¦å·å¯†ç åŽå†æ¬¡è¿è¡Œ.\n";
 		return std::nullopt;
 	}
 
 	{
-		std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
-		std::wstring path = converter.from_bytes(conf->INI_FILE_PATH);
+		wchar_t wcUserName[50];
+		char cUserName[50];
+		GetPrivateProfileStringW(_T("Settings"), _T("UserName"), _T(""), wcUserName, 50, conf->INI_FILE_PATH.wstring().c_str());
+		WideCharToMultiByte(CP_UTF8, WC_NO_BEST_FIT_CHARS, wcUserName, 50, cUserName, 50, NULL, NULL);
+		conf->USER_NAME = std::move(std::string(cUserName));
 
-		wchar_t userName[50];
-		GetPrivateProfileStringW(_T("Settings"), _T("UserName"), _T(""), userName, 50, path.c_str());
-		conf->USER_NAME = converter.to_bytes(userName);
-
-		wchar_t password[50];
-		GetPrivateProfileStringW(_T("Settings"), _T("Password"), _T(""), password, 50, path.c_str());
-		conf->PASSWORD = converter.to_bytes(password);
+		wchar_t wcPassword[50];
+		char cPassword[50];
+		GetPrivateProfileStringW(_T("Settings"), _T("Password"), _T(""), wcPassword, 50, conf->INI_FILE_PATH.wstring().c_str());
+		WideCharToMultiByte(CP_UTF8, WC_NO_BEST_FIT_CHARS, wcPassword, 50, cPassword, 50, NULL, NULL);
+		conf->PASSWORD = std::move(std::string(cPassword));
+		;
 	}
 
 	if (conf->USER_NAME.size() == 0 || conf->PASSWORD.size() == 0)
 	{
-		std::cout << "ÕËºÅ»òÃÜÂëÎª¿Õ\n" << "Çë´ò¿ª settings.ini ÎÄ¼þÅäÖÃÕËºÅÃÜÂë.\n";
+		std::cout << "è´¦å·æˆ–å¯†ç ä¸ºç©º\n"
+				  << "è¯·æ‰“å¼€ settings.ini æ–‡ä»¶é…ç½®è´¦å·å¯†ç .\n";
 		return std::nullopt;
 	}
 
-	std::cout << "ÕËºÅ: " << conf->USER_NAME << "\n";
-	std::cout << "ÃÜÂë: " << Utils::GenerateMask(conf->PASSWORD.size()) << "\n";
+	std::cout << "è´¦å·: " << conf->USER_NAME << "\n";
+	std::cout << "å¯†ç : " << Utils::GenerateMask(conf->PASSWORD.size()) << "\n";
 
 	return conf;
 }
 
-int main(int argc, char** argv) {
-	Config* conf = nullptr;
+int main(int argc, char **argv)
+{
+	Config *conf = nullptr;
 	{
-		std::optional<Config*> initialized = init(argv[0]);
-		if (!initialized.has_value()) {
+		std::optional<Config *> initialized = init(argv[0]);
+		if (!initialized.has_value())
+		{
 			system("pause");
 			return 1;
 		}
 		conf = initialized.value();
 	}
 
-	bool ok = true;
 	if (argc == 2 && strcmp(argv[1], "-service") == 0)
-		ok = ServiceManager::Run(conf);
-	else
-	{
-		std::cout << "¿ìËÙµÇÂ¼...\n";
-		bool res = Auth::Login(conf->USER_NAME.c_str(), conf->PASSWORD.c_str());
-		std::cout << (res ? "µÇÂ½³É¹¦" : "µÇÂ½Ê§°Ü") << '\n';
-		ok = CLI::Run(conf);
-	}
+		return ServiceManager::Run(conf);
 
-	delete conf;
-	system("pause");
-	return ok;
+	std::cout << "å¿«é€Ÿç™»å½•...\n";
+	bool res = Auth::Login(conf->USER_NAME, conf->PASSWORD);
+	std::cout << (res ? "ç™»é™†æˆåŠŸ" : "ç™»é™†å¤±è´¥") << '\n';
+	return CLI::Run(conf);
 }

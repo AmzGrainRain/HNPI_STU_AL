@@ -1,25 +1,22 @@
-#ifndef __HNPU_STU_AL__SERVICE_MANAGER_HPP__
-#define __HNPU_STU_AL__SERVICE_MANAGER_HPP__
-
+#pragma once
 #ifndef _UNICODE
 #define _UNICODE
 #endif
-
 #ifndef UNICODE
 #define UNICODE
 #endif
 
 #include <iostream>
 #include <string>
-#include <fstream>		// std::ofstream
-#include <format>		// std::format
+#include <fstream> // std::ofstream
+#include <format>  // std::format
 
 #include <tchar.h>
-#include <winsock2.h>	// Windows Network API
-#include <netioapi.h>	// NotifyIpInterfaceChange
-#include <iphlpapi.h>	// IP Helper API
-#include <ws2tcpip.h>	// Windows Socket API
-#include <windows.h>	// Windows API
+#include <winsock2.h> // Windows Network API
+#include <netioapi.h> // NotifyIpInterfaceChange
+#include <iphlpapi.h> // IP Helper API
+#include <ws2tcpip.h> // Windows Socket API
+#include <windows.h>  // Windows API
 #pragma comment(lib, "ws2_32.lib")
 #pragma comment(lib, "IPHLPAPI.lib")
 #include <cstdlib>
@@ -28,29 +25,22 @@
 #include "logger.hpp"
 #include "auth.hpp"
 
-namespace ServiceManager {
+namespace ServiceManager
+{
 	using namespace std::chrono_literals;
 
-	wchar_t ServiceName[12] = L"HNPI_STU_AL";
-	wchar_t ServiceDisplayName[20] = L"∫”ƒœπ§“µ÷∞“µºº ı—ß‘∫–£‘∞Õ¯◊‘∂Ø»œ÷§∑˛ŒÒ";
+	std::wstring ServiceName = L"HNPI_STU_AL";
+	std::wstring ServiceDisplayName = L"Ê≤≥ÂçóÂ∑•‰∏öËÅå‰∏öÊäÄÊúØÂ≠¶Èô¢Ê†°Âõ≠ÁΩëËá™Âä®ËÆ§ËØÅÊúçÂä°";
 
 	SERVICE_STATUS_HANDLE ServiceStatusHandle;
 	SERVICE_STATUS ServiceStatus;
-	Config* conf;
-	static Logger* logger;
 
-	// internal function, don't call this.
-	void PrintError(const char* msg) noexcept {
-		std::cout << msg << ": " << GetLastError() << '\n';
-	}
+	Config *conf;
+	static Logger *logger;
 
 	// internal function, don't call this.
 	void ReportServiceStatus(DWORD dwCurrentState, DWORD dwWin32ExitCode, DWORD dwWaitHint)
 	{
-		auto log = [](const char* msg) {
-			logger->writeInfo("ReportServiceStatus", msg);
-			};
-
 		ServiceStatus.dwCurrentState = dwCurrentState;
 		ServiceStatus.dwWin32ExitCode = dwWin32ExitCode;
 		ServiceStatus.dwWaitHint = dwWaitHint;
@@ -59,13 +49,16 @@ namespace ServiceManager {
 			ServiceStatus.dwControlsAccepted = 0;
 		else
 		{
-			log("Service started.\n");
+#ifdef _DEBUG
+			logger->writeInfo("ReportServiceStatus", "Service started.\n");
+#endif
 			ServiceStatus.dwControlsAccepted = SERVICE_ACCEPT_STOP;
 		}
 
 		if (dwCurrentState == SERVICE_RUNNING || dwCurrentState == SERVICE_STOPPED)
 			ServiceStatus.dwCheckPoint = 0;
-		else ServiceStatus.dwCheckPoint++;
+		else
+			ServiceStatus.dwCheckPoint++;
 
 		SetServiceStatus(ServiceStatusHandle, &ServiceStatus);
 	}
@@ -74,11 +67,18 @@ namespace ServiceManager {
 	DWORD WINAPI HandlerEx(DWORD dwControl, DWORD dwEventType, LPVOID lpEventData, LPVOID lpContext)
 	{
 		logger->writeInfo("HandlerEx", std::format("Operation instructions: {}\n", dwControl).c_str());
-		switch (dwControl) {
+
+		switch (dwControl)
+		{
 		case SERVICE_CONTROL_STOP:
 			ReportServiceStatus(SERVICE_STOP_PENDING, NO_ERROR, 0);
+#ifdef _DEBUG
 			logger->writeInfo("HandlerEx", "Service shutting down...\n");
+#endif
 			ReportServiceStatus(SERVICE_STOPPED, NO_ERROR, 0);
+#ifdef _DEBUG
+			logger->writeInfo("HandlerEx", "Service stopped.\n");
+#endif
 			return NO_ERROR;
 		case SERVICE_CONTROL_INTERROGATE:
 			return NO_ERROR;
@@ -93,14 +93,16 @@ namespace ServiceManager {
 	{
 		logger->writeInfo("OnNetworkAddressChanged", "Network address changed.\n");
 		logger->writeInfo("Auth", "Login...\n");
-		bool loginResult = Auth::Login(conf->USER_NAME.c_str(), conf->PASSWORD.c_str());
+		bool loginResult = Auth::Login(conf->USER_NAME, conf->PASSWORD);
 		logger->writeInfo("Auth", loginResult ? "Login successful.\n" : "Login failed.\n");
 	}
 
 	// internal function, don't call this.
-	void WINAPI ServiceMain(DWORD argc, LPTSTR* argv)
+	void WINAPI ServiceMain(DWORD argc, LPTSTR *argv)
 	{
+#ifdef _DEBUG
 		logger->writeInfo("ServiceMain", "Initializing service...\n");
+#endif
 		ServiceStatus.dwServiceType = SERVICE_WIN32_OWN_PROCESS;
 		ServiceStatus.dwCurrentState = SERVICE_START_PENDING;
 		ServiceStatus.dwControlsAccepted = SERVICE_ACCEPT_STOP;
@@ -109,7 +111,7 @@ namespace ServiceManager {
 		ServiceStatus.dwCheckPoint = 0;
 		ServiceStatus.dwWaitHint = 0;
 
-		ServiceStatusHandle = ::RegisterServiceCtrlHandlerExW(ServiceName, HandlerEx, NULL);
+		ServiceStatusHandle = ::RegisterServiceCtrlHandlerExW(ServiceName.c_str(), HandlerEx, NULL);
 		if (ServiceStatusHandle == NULL)
 		{
 			logger->writeError("ServiceMain", "Failed to open service control handler.\n");
@@ -136,11 +138,11 @@ namespace ServiceManager {
 
 		logger->writeInfo("ServiceMain", "\n\n\n\t\tService started\n\n\n");
 		ReportServiceStatus(SERVICE_RUNNING, NO_ERROR, 0);
-		while (ServiceStatus.dwCurrentState == SERVICE_RUNNING) {
+		while (ServiceStatus.dwCurrentState == SERVICE_RUNNING)
+		{
 			Sleep(120000);
 		}
 
-		WSACleanup();
 		ReportServiceStatus(SERVICE_STOPPED, NO_ERROR, 0);
 	}
 
@@ -148,24 +150,27 @@ namespace ServiceManager {
 	bool Install()
 	{
 		SC_HANDLE hSCM = OpenSCManager(NULL, NULL, SC_MANAGER_CREATE_SERVICE);
-		if (hSCM == NULL) {
-			PrintError("¥Úø™∑˛ŒÒπ‹¿Ì∆˜ ß∞‹");
+		if (hSCM == NULL)
+		{
+			std::cout << "ÊâìÂºÄÊúçÂä°ÁÆ°ÁêÜÂô®Â§±Ë¥•\n";
 			return false;
 		}
 
 		wchar_t execPathWithParams[MAX_PATH];
-		GetModuleFileName(NULL, execPathWithParams, MAX_PATH);
+		GetModuleFileNameW(NULL, execPathWithParams, MAX_PATH);
 		wcscat_s(execPathWithParams, MAX_PATH, L" -service");
 
 		SC_HANDLE hService = CreateServiceW(
-			hSCM, ServiceName, ServiceDisplayName,
+			hSCM, ServiceName.c_str(), ServiceDisplayName.c_str(),
 			SERVICE_ALL_ACCESS, SERVICE_WIN32_OWN_PROCESS,
 			SERVICE_AUTO_START, SERVICE_ERROR_NORMAL,
-			execPathWithParams, NULL, NULL, NULL, NULL, NULL
-		);
-		if (hService == NULL) {
-			if (GetLastError() == 1073) std::cout << "∑˛ŒÒ“—¥Ê‘⁄.\n";
-			else PrintError("¥¥Ω®∑˛ŒÒ ß∞‹");
+			execPathWithParams, NULL, NULL, NULL, NULL, NULL);
+		if (hService == NULL)
+		{
+			if (GetLastError() == 1073)
+				std::cout << "ÊúçÂä°Â∑≤Â≠òÂú®.\n";
+			else
+				std::cout << "ÂàõÂª∫ÊúçÂä°Â§±Ë¥•\n";
 			CloseServiceHandle(hSCM);
 			return false;
 		}
@@ -180,35 +185,40 @@ namespace ServiceManager {
 	bool Uninstall()
 	{
 		SC_HANDLE hSCM = OpenSCManager(NULL, NULL, SC_MANAGER_CONNECT);
-		if (hSCM == NULL) {
-			PrintError("¥Úø™∑˛ŒÒπ‹¿Ì∆˜ ß∞‹");
+		if (hSCM == NULL)
+		{
+			std::cout << "ÊâìÂºÄÊúçÂä°ÁÆ°ÁêÜÂô®Â§±Ë¥•\n";
 			return false;
 		}
 
-		SC_HANDLE hService = OpenService(hSCM, ServiceName, SERVICE_QUERY_STATUS | DELETE);
-		if (hService == NULL) {
-			PrintError("¥Úø™∑˛ŒÒ ß∞‹");
+		SC_HANDLE hService = OpenService(hSCM, ServiceName.c_str(), SERVICE_QUERY_STATUS | DELETE);
+		if (hService == NULL)
+		{
+			std::cout << "ÊâìÂºÄÊúçÂä°Â§±Ë¥•\n";
 			CloseServiceHandle(hSCM);
 			return false;
 		}
 
 		SERVICE_STATUS status;
-		if (QueryServiceStatus(hService, &status) == 0) {
-			PrintError("Œﬁ∑®≤È—Ø∑˛ŒÒ◊¥Ã¨");
+		if (QueryServiceStatus(hService, &status) == 0)
+		{
+			std::cout << "Êó†Ê≥ïÊü•ËØ¢ÊúçÂä°Áä∂ÊÄÅ\n";
 			CloseServiceHandle(hService);
 			CloseServiceHandle(hSCM);
 			return false;
 		}
 
-		if (status.dwCurrentState != SERVICE_STOPPED) {
-			std::cout << "∑˛ŒÒ’˝‘⁄‘À––÷–, «Î“‘π‹¿Ì‘±…Ì∑›÷¥–– \"net stop HNPI_STUAL\" Õ£÷π∑˛ŒÒ∫Û‘Ÿ¥Œ≥¢ ‘.\n";
+		if (status.dwCurrentState != SERVICE_STOPPED)
+		{
+			std::cout << "ÊúçÂä°Ê≠£Âú®ËøêË°å‰∏≠, ËØ∑‰ª•ÁÆ°ÁêÜÂëòË∫´‰ªΩÊâßË°å \"net stop HNPI_STUAL\" ÂÅúÊ≠¢ÊúçÂä°ÂêéÂÜçÊ¨°Â∞ùËØï.\n";
 			CloseServiceHandle(hService);
 			CloseServiceHandle(hSCM);
 			return false;
 		}
 
-		if (DeleteService(hService) == 0) {
-			PrintError("–∂‘ÿ∑˛ŒÒ ß∞‹");
+		if (DeleteService(hService) == 0)
+		{
+			std::cout << "Âç∏ËΩΩÊúçÂä°Â§±Ë¥•\n";
 			CloseServiceHandle(hService);
 			CloseServiceHandle(hSCM);
 			return false;
@@ -219,38 +229,43 @@ namespace ServiceManager {
 		return true;
 	}
 
+	inline void DestoryLogger()
+	{
+		logger = nullptr;
+		Logger::DestoryInstance();
+	}
+
 	// run service
-	bool Run(Config* config)
+	int Run(Config *config)
 	{
 		conf = config;
+
 		SERVICE_TABLE_ENTRY ServiceTable[] = {
-			{ServiceName, (LPSERVICE_MAIN_FUNCTIONW)ServiceMain},
-			{NULL, NULL}
-		};
+			{(LPWSTR)ServiceName.c_str(), (LPSERVICE_MAIN_FUNCTIONW)ServiceMain},
+			{NULL, NULL}};
 
 		try
 		{
-			logger = new Logger((conf->PWD + "\\logs").c_str());
+			logger = Logger::GetInstance(conf->PWD / "logs");
 			logger->writeInfo("SERVICE_TABLE_ENTRY", "OK\n");
+			Auth::Login(conf->USER_NAME, conf->PASSWORD);
 		}
-		catch (const std::exception& err)
+		catch (const std::exception &err)
 		{
+			DestoryLogger();
 			std::cout << err.what();
-			return false;
+			return 1;
 		}
 
-		Auth::Login(conf->USER_NAME.c_str(), conf->PASSWORD.c_str());
-
-		if (::StartServiceCtrlDispatcherW(ServiceTable) == FALSE) {
+		if (::StartServiceCtrlDispatcherW(ServiceTable) == FALSE)
+		{
 			logger->writeError("Main", "Failed to start service control dispatcher.\n");
-			PrintError("StartServiceCtrlDispatcher");
-			return false;
+			DestoryLogger();
+			return 1;
 		}
 
 		logger->writeInfo("ServiceCtrlDispatcherW", "OK\n");
-		delete logger;
-		return true;
+		DestoryLogger();
+		return 0;
 	}
 }
-
-#endif // !__HNPU_STU_AL__SERVICE_MANAGER_HPP__

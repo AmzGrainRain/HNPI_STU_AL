@@ -1,45 +1,8 @@
-#ifndef __HNPI_STU_AL__UTILS_HPP__
-#define __HNPI_STU_AL__UTILS_HPP__
-
-#include <string>		// std::string | std::wstring
-#include <filesystem>	// std::filesystem::exists
-
-#include <windows.h>	// WideCharToMultiByte() | MultiByteToWideChar()
+#pragma once
+#include <string>	// std::string
 
 namespace Utils
 {
-	// Convert a wide Unicode string to an UTF8 string
-	std::string wchar2char(const wchar_t* const wc)
-	{
-		size_t len = wcslen(wc);
-		if (len == 0) return "";
-
-		int sizeNeeded = WideCharToMultiByte(CP_UTF8, 0, wc, -1, NULL, 0, NULL, NULL);
-		char* buffer = new char[sizeNeeded];
-		WideCharToMultiByte(CP_UTF8, 0, wc, -1, buffer, sizeNeeded, NULL, NULL);
-
-		std::string res(buffer);
-		delete[] buffer;
-
-		return res;
-	}
-
-	// Convert an UTF8 string to a wide Unicode String
-	std::wstring char2wchar(const char* c)
-	{
-		size_t len = strlen(c);
-		if (!len) return L"";
-
-		int sizeNeeded = MultiByteToWideChar(CP_UTF8, 0, c, len, NULL, 0);
-		wchar_t* buffer = new wchar_t[sizeNeeded];
-		MultiByteToWideChar(CP_UTF8, 0, c, len, buffer, sizeNeeded);
-
-		std::wstring res(buffer);
-		delete[] buffer;
-
-		return res;
-	}
-
 	// Generate a password mask
 	static std::string GenerateMask(size_t len) noexcept
 	{
@@ -49,15 +12,12 @@ namespace Utils
 		return mask;
 	}
 
-	// Check file exist
-	static bool FileExists(const char* path) {
-		return std::filesystem::exists(path);
-	}
-
-	const char* EncodeURIComponent(const char* url) noexcept {
+	std::string EncodeURIComponent(const std::string &url) noexcept
+	{
 		std::string res;
-		for (size_t i = 0; i < strlen(url); ++i) {
-			switch (url[i])
+		for (char c : url)
+		{
+			switch (c)
 			{
 			case ' ':
 				res += "%20";
@@ -153,10 +113,10 @@ namespace Utils
 				res += "%7E";
 				break;
 			default:
-				res += i;
+				res += c;
 			}
 		}
-		return res.c_str();
+		return res;
 	}
 
 	void HideConsoleCursor()
@@ -168,5 +128,3 @@ namespace Utils
 		SetConsoleCursorInfo(hConsole, &cci);
 	}
 }
-
-#endif // !__HNPI_STU_AL__UTILS_HPP__

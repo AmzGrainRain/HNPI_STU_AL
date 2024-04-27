@@ -1,24 +1,23 @@
-#ifndef __HNPU_STU_AL__CLI_HPP__
-#define __HNPU_STU_AL__CLI_HPP__
+#pragma once
+#include <iostream> // std::cout | std::cin
 
-#include <iostream>				// std::cout | std::cin
+#include "def.h"			   // struct Config
+#include "service_manager.hpp" // class ServiceManager
+#include "auth.hpp"			   // namespace Auth
 
-#include "def.h"				// struct Config
-#include "service_manager.hpp"	// class ServiceManager
-#include "auth.hpp"				// namespace Auth
-
-namespace CLI {
+namespace CLI
+{
 	static inline void ShowMenu() noexcept
 	{
 		std::cout
-			<< "================= ¹¤ÔºĞ£Ô°ÍøµÇÂ¼ =================\n"
-			<< "1.¿ªÆô×Ô¶¯µÇÂ¼Ğ£Ô°Íø¹¦ÄÜ (°²×°·şÎñ) [¹ÜÀíÔ±È¨ÏŞ]\n"
-			<< "2.¹Ø±Õ×Ô¶¯µÇÂ¼Ğ£Ô°Íø¹¦ÄÜ (Ğ¶ÔØ·şÎñ) [¹ÜÀíÔ±È¨ÏŞ]\n"
-			<< "3.³¢ÊÔµÇÂ¼Ğ£Ô°Íø\n"
-			<< "4.ÍË³ö³ÌĞò\n";
+			<< "\n=========== æ²³å—å·¥ä¸šèŒä¸šæŠ€æœ¯å­¦é™¢-æ ¡å›­ç½‘ç™»å½• ===========\n"
+			<< "1.å¼€å¯è‡ªåŠ¨ç™»å½•æ ¡å›­ç½‘åŠŸèƒ½ (å®‰è£…æœåŠ¡) [ç®¡ç†å‘˜æƒé™]\n"
+			<< "2.å…³é—­è‡ªåŠ¨ç™»å½•æ ¡å›­ç½‘åŠŸèƒ½ (å¸è½½æœåŠ¡) [ç®¡ç†å‘˜æƒé™]\n"
+			<< "3.å°è¯•ç™»å½•æ ¡å›­ç½‘\n"
+			<< "4.é€€å‡ºç¨‹åº\n";
 	}
 
-	inline bool Run(const Config* const conf)
+	inline int Run(Config *conf)
 	{
 		std::cout << '\t';
 		ShowMenu();
@@ -30,37 +29,40 @@ namespace CLI {
 			while (!(std::cin >> choice))
 			{
 				std::cin.clear();
-				while (std::cin.get() != '\n');
-				std::cout << "´íÎóµÄÊäÈë\n>: ";
+				while (std::cin.get() != '\n')
+					;
+				std::cout << "é”™è¯¯çš„è¾“å…¥\n>: ";
 			}
 
 			switch (choice)
 			{
 			case 1:
-				std::cout << "°²×°·şÎñ...\n";
-				if (ServiceManager::Install()) std::cout << "°²×°³É¹¦.\n";
-				else std::cout << "°²×°Ê§°Ü, ÇëÒÔ¹ÜÀíÔ±Éí·İÔËĞĞ´Ë³ÌĞò.\n";
+				std::cout << "å®‰è£…æœåŠ¡...\n";
+				if (ServiceManager::Install())
+					std::cout << "å®‰è£…æˆåŠŸ.\n";
+				else
+					std::cout << "å®‰è£…å¤±è´¥, è¯·ä»¥ç®¡ç†å‘˜èº«ä»½è¿è¡Œæ­¤ç¨‹åº.\n";
 				break;
 			case 2:
-				std::cout << "Ğ¶ÔØ·şÎñ...\n";
-				if (ServiceManager::Uninstall()) std::cout << "Ğ¶ÔØ³É¹¦.\n";
-				else std::cout << "Ğ¶ÔØÊ§°Ü, ÇëÒÔ¹ÜÀíÔ±Éí·İÔËĞĞ´Ë³ÌĞò.\n";
+				std::cout << "å¸è½½æœåŠ¡...\n";
+				if (ServiceManager::Uninstall())
+					std::cout << "å¸è½½æˆåŠŸ.\n";
+				else
+					std::cout << "å¸è½½å¤±è´¥, è¯·ä»¥ç®¡ç†å‘˜èº«ä»½è¿è¡Œæ­¤ç¨‹åº.\n";
 				break;
 			case 3:
-				std::cout << "³¢ÊÔµÇÂ¼...\n";
-				std::cout << (Auth::Login(conf->USER_NAME.c_str(), conf->PASSWORD.c_str()) ? "µÇÂ¼³É¹¦" : "µÇÂ¼Ê§°Ü") << '\n';
+				std::cout << "å°è¯•ç™»å½•...\n";
+				std::cout << (Auth::Login(conf->USER_NAME, conf->PASSWORD) ? "ç™»å½•æˆåŠŸ" : "ç™»å½•å¤±è´¥") << '\n';
 				break;
 			case 4:
-				return true;
+				return 1;
 			default:
-				std::cout << "´íÎóµÄÊäÈë.\n";
+				std::cout << "é”™è¯¯çš„è¾“å…¥.\n";
 				ShowMenu();
 				break;
 			}
 		}
 
-		return true;
+		return 1;
 	}
 } // namespace CLI
-
-#endif // !__HNPU_STU_AL__CLI_HPP__

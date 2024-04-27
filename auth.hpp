@@ -1,27 +1,67 @@
-#ifndef __HNPI_STU_AL__AUTH_HPP__
-#define __HNPI_STU_AL__AUTH_HPP__
+#pragma once
 
-#include <iostream>		// std::cout | std::cin
-#include <string>		// std::string
-#include <optional>		// std::optional
-#include <sstream>		// std::stringstream
-#include <codecvt>		// std::wstring_convert | std::codecvt_utf8_utf16
+#include <iostream> // std::cout
+#include <string>	// std::string
+#include <optional> // std::optional
+#include <sstream>	// std::stringstream
 
-// libhv
+// ---------------------- libhv ---------------------- //
 #include "HttpClient.h"
 #include "requests.h"
-//#define HV_STATICLIB
-//#define HV_EXPORT __declspec(dllimport)
-//#pragma comment(lib, "hv_static.lib")
+// --------------------------------------------------- //
 
-#include "utils.hpp"			// namespace Utils
-#include "service_manager.hpp"	// namespace ServiceManager
+#include "utils.hpp"		   // namespace Utils
+#include "service_manager.hpp" // namespace ServiceManager
 
-namespace Auth {
-	static std::optional<const char*> GetSessionId() {
-		try {
-			hv::HttpClient client;
+namespace Auth
+{
+	static std::optional<std::string> GetQueryString()
+	{
+		try
+		{
+			// HttpRequest req;
+			// req.method = HTTP_GET;
+			// req.url = "http://123.123.123.123";
+			// req.timeout = 2;
+			// req.body = NoBody;
+			// req.headers = DefaultHeaders;
 
+			// HttpResponse res;
+
+			// hv::HttpClient client;
+			// client.send(&req, &res);
+
+			// std::cout << res.body.c_str();
+
+			// if (res.status_code != 200)
+			// 	return std::nullopt;
+
+
+			// std::string body = res.body.c_str();
+			// size_t start = body.find('?') + 1;
+			// size_t end = body.rfind('\'');
+			// return body.substr(start, end - start);
+
+			auto res = requests::get("http://123.123.123.123");
+			if (res == NULL)
+				return std::nullopt;
+
+			std::string body = res->body.c_str();
+			size_t start = body.find('?') + 1;
+			size_t end = body.rfind('\'');
+			return body.substr(start, end - start);
+		}
+		catch (const std::exception &err)
+		{
+			std::cout << err.what() << "\n";
+			return std::nullopt;
+		}
+	}
+
+	static std::optional<std::string> GetSessionId()
+	{
+		try
+		{
 			HttpRequest req;
 			req.method = HTTP_GET;
 			req.url = "http://192.168.0.123";
@@ -31,42 +71,28 @@ namespace Auth {
 			req.headers["Upgrade-Insecure-Requests"] = 1;
 			req.headers["User-Agent"] = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36 Edg/116.0.1938.76";
 
+			hv::HttpClient client;
 			HttpResponse res;
 			client.send(&req, &res);
 
 			auto it = res.headers.find("Set-Cookie");
 			if (it == res.headers.end())
 				return std::nullopt;
-
 			std::string cookie = it->second;
 
-			return cookie.substr(0, cookie.find(';')).c_str();
+			return cookie.substr(0, cookie.find(';'));
 		}
-		catch (const std::exception& err) {
+		catch (const std::exception &err)
+		{
 			std::cout << err.what() << "\n";
 			return std::nullopt;
 		}
 	}
 
-	static std::optional<const char*> GetQueryString() {
-		try {
-			auto res = requests::get("http://123.123.123.123");
-			if (res == NULL)
-				return std::nullopt;
-
-			std::string body = res->body.c_str();
-			size_t start = body.find('?') + 1;
-			size_t end = body.rfind('\'');
-			return body.substr(start, end - start).c_str();
-		}
-		catch (const std::exception& err) {
-			std::cout << err.what() << "\n";
-			return std::nullopt;
-		}
-	}
-
-	static std::optional<const char*> Auth(const char* userName,
-		const char* password, const char* sessionId, const char* queryString)
+	static std::optional<std::string> Auth(const std::string &userName,
+										   const std::string &password,
+										   const std::string &sessionId,
+										   const std::string &queryString)
 	{
 		std::string cookie = "EPORTAL_COOKIE_PASSWORD=; ";
 		cookie += "EPORTAL_COOKIE_USERNAME=; ";
@@ -86,50 +112,48 @@ namespace Auth {
 		HttpRequest req;
 		req.method = HTTP_POST;
 		req.url = "http://192.168.0.123/eportal/InterFace.do?method=login";
+		req.timeout = 3;
 		req.headers["Content-Type"] = "application/x-www-form-urlencoded";
 		req.headers["Cookie"] = cookie;
 		req.headers["Dnt"] = "1";
 		req.headers["Host"] = "192.168.0.123";
 		req.headers["Origin"] = "http://192.168.0.123";
-		req.headers["Referer"] = "http://192.168.0.123/eportal/index.jsp?" + std::string(queryString);
+		req.headers["Referer"] = "http://192.168.0.123/eportal/index.jsp?" + queryString;
 		req.headers["User-Agent"] = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36 Edg/116.0.1938.76";
 		req.body = body.str();
 
-		hv::HttpClient client;
 		HttpResponse res;
 		res.SetContentType("text/plain; charset=utf-8");
+
+		hv::HttpClient client;
 		client.send(&req, &res);
 
-		return res.body.c_str();
+		return std::string(res.body);
 	}
 
-	bool Login(const char* userName, const char* password)
+	bool Login(const std::string &userName, const std::string &password)
 	{
 		auto queryString = GetQueryString();
-		if (!queryString.has_value()) {
-			std::cout << "»ñÈ¡ WiFi ÐÅÏ¢Ê§°Ü. (ÒÑ³É¹¦µÇÂ¼µÄÎÞ·¨ÔÙ´ÎµÇÂ¼)\n";
+		if (!queryString.has_value())
+		{
+			std::cout << "èŽ·å– WiFi ä¿¡æ¯å¤±è´¥. (å·²æˆåŠŸç™»å½•çš„æ— æ³•å†æ¬¡ç™»å½•)\n";
 			return false;
 		}
 
 		auto sessionId = GetSessionId();
-		if (!sessionId.has_value()) {
-			std::cout << "ÍøÂçÒì³£.\n";
+		if (!sessionId.has_value())
+		{
+			std::cout << "ç½‘ç»œå¼‚å¸¸.\n";
 			return false;
 		}
 
-		auto authResult = Auth(
-			userName,
-			password,
-			std::move(sessionId.value()),
-			std::move(queryString.value())
-		);
-		if (!authResult.has_value()) {
-			std::cout << "µÇÂ¼Ê§°Ü.\n";
+		auto authResult = Auth(userName, password, sessionId.value(), queryString.value());
+		if (!authResult.has_value())
+		{
+			std::cout << "ç™»å½•å¤±è´¥.\n";
 			return false;
 		}
 
 		return true;
 	}
 }
-
-#endif // !__HNPI_STU_AL__AUTH_HPP__
